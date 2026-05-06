@@ -98,16 +98,17 @@ function App() {
       setHistory(JSON.parse(saved));
     }
 
-    // Initialize Stars
+    // Initialize Stars - Reduced count for performance
     const initialStars: Star[] = [];
-    for (let i = 0; i < 150; i++) {
+    const starCount = window.innerWidth < 768 ? 30 : 60; // Responsive star count
+    for (let i = 0; i < starCount; i++) {
       initialStars.push({
         id: i,
         x: Math.random() * 100,
         y: Math.random() * 100,
         size: Math.random() * 2 + 0.5,
-        opacity: Math.random(),
-        duration: Math.random() * 3 + 2
+        opacity: Math.random() * 0.7 + 0.3,
+        duration: Math.random() * 5 + 3
       });
     }
     setStars(initialStars);
@@ -139,9 +140,9 @@ function App() {
     const interval = setInterval(() => {
         // Create random explosion in the background (silent)
         const x = Math.random() * window.innerWidth;
-        const y = Math.random() * (window.innerHeight * 0.7); // Mostly upper part
+        const y = Math.random() * (window.innerHeight * 0.5); // Upper half
         triggerExplosion(x, y, false);
-    }, 1200);
+    }, 2000); // Increased interval
 
     return () => clearInterval(interval);
   }, [isLocked]);
@@ -157,8 +158,8 @@ function App() {
 
     // 2. Generate Particles
     const newParticles: Particle[] = [];
-    const colors = ['#FF003C', '#FFD700', '#04D9FF', '#BC13FE', '#FFFFFF', '#00FF00'];
-    const particleCount = playSound ? 60 : 30; // More particles for user interaction
+    const colors = ['#FF003C', '#FFD700', '#04D9FF', '#BC13FE', '#FFFFFF'];
+    const particleCount = playSound ? 40 : 20; // Reduced count
 
     for (let i = 0; i < particleCount; i++) {
         const angle = Math.random() * Math.PI * 2;
@@ -411,9 +412,10 @@ function App() {
                         width: `${p.size}px`,
                         height: `${p.size}px`,
                         backgroundColor: p.color,
-                        boxShadow: `0 0 ${p.size * 2}px ${p.color}, 0 0 ${p.size * 4}px ${p.color}`,
+                        boxShadow: `0 0 ${p.size * 2}px ${p.color}`,
                         '--tx': `${p.tx}px`,
-                        '--ty': `${p.ty}px`
+                        '--ty': `${p.ty}px`,
+                        willChange: 'transform, opacity'
                     } as React.CSSProperties}
                  />
              ))}
@@ -505,8 +507,8 @@ function App() {
         <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] bg-neonPurple/20 rounded-full blur-[120px] animate-float"></div>
         <div className="absolute top-[30%] left-[40%] w-[30%] h-[30%] bg-neonBlue/10 rounded-full blur-[100px] animate-spin-slow"></div>
         
-        {/* Starfield */}
-        <div className="absolute inset-0">
+        {/* Starfield - Optimized with React.memo or simple separation */}
+        <div className="absolute inset-0 overflow-hidden">
           {stars.map(star => (
             <div 
               key={star.id}
@@ -518,7 +520,9 @@ function App() {
                 height: `${star.size}px`,
                 opacity: star.opacity,
                 animationDuration: `${star.duration}s`,
-                boxShadow: `0 0 ${star.size * 2}px rgba(255, 255, 255, 0.8)`
+                boxShadow: `0 0 ${star.size * 2}px rgba(255, 255, 255, 0.8)`,
+                willChange: 'opacity',
+                transform: 'translateZ(0)' // Force GPU
               }}
             />
           ))}
