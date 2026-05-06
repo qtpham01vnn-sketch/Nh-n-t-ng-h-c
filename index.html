@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>THIÊN CƠ BẤT KHẢ LỘ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              neonRed: '#FF003C',
+              neonBlue: '#04D9FF',
+              neonGold: '#FFD700',
+              neonPurple: '#BC13FE',
+              deepPurple: '#2E003E',
+              deepBg: '#05000A',
+              panelBg: '#13001C',
+            },
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+              display: ['Orbitron', 'sans-serif'],
+            },
+            animation: {
+              'spin-slow': 'spin 3s linear infinite',
+              'pulse-fast': 'pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+              'glow': 'glow 2s ease-in-out infinite alternate',
+              'float': 'float 6s ease-in-out infinite',
+              'gradient-xy': 'gradient-xy 3s ease infinite',
+            },
+            keyframes: {
+              glow: {
+                '0%': { boxShadow: '0 0 5px #BC13FE, 0 0 10px #BC13FE' },
+                '100%': { boxShadow: '0 0 20px #BC13FE, 0 0 30px #BC13FE' },
+              },
+              float: {
+                '0%, 100%': { transform: 'translateY(0)' },
+                '50%': { transform: 'translateY(-20px)' },
+              },
+              'gradient-xy': {
+                '0%, 100%': {
+                  'background-size': '400% 400%',
+                  'background-position': 'left center'
+                },
+                '50%': {
+                  'background-size': '200% 200%',
+                  'background-position': 'right center'
+                }
+              },
+              'text-flow': {
+                '0%': { 'background-position': '0% 50%' },
+                '100%': { 'background-position': '200% 50%' },
+              }
+            }
+          },
+        },
+      }
+    </script>
+    <script>
+      // Global shims for browser environment
+      window.global = window;
+      window.process = { env: { NODE_ENV: 'development' } };
+      
+      // Attempt to make fetch writable to prevent errors from libraries trying to polyfill it
+      try {
+        const originalFetch = window.fetch;
+        Object.defineProperty(window, 'fetch', {
+          value: originalFetch,
+          writable: true,
+          configurable: true,
+          enumerable: true
+        });
+      } catch (e) {
+        console.warn('Note: Could not redefine fetch, some libraries might fail if they try to overwrite it.');
+      }
+    </script>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Playfair+Display:wght@400;700;900&display=swap');
+      
+      body {
+        background-color: #05000A;
+        color: #ffffff;
+        font-family: 'Inter', sans-serif;
+      }
+      
+      /* Scrollbar styling */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #13001C;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #BC13FE;
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #FF003C;
+      }
+
+      /* Firework Particle Animation */
+      .firework-particle {
+        position: absolute;
+        border-radius: 50%;
+        animation: explode 1s cubic-bezier(0, 0, 0.2, 1) forwards;
+        pointer-events: none;
+      }
+
+      @keyframes explode {
+        0% {
+          transform: translate(0, 0) scale(1);
+          opacity: 1;
+        }
+        50% {
+          opacity: 1;
+        }
+        100% {
+          transform: translate(var(--tx), var(--ty)) scale(0);
+          opacity: 0;
+        }
+      }
+
+      /* SUPER PREMIUM MARKDOWN STYLING */
+      .markdown-content {
+        font-family: 'Inter', sans-serif;
+        color: #E0E0E0;
+        line-height: 1.8;
+      }
+
+      /* HEADINGS - LUXURY GRADIENT */
+      .markdown-content h1, 
+      .markdown-content h2, 
+      .markdown-content h3 {
+        font-family: 'Playfair Display', serif;
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        background: linear-gradient(to right, #FFD700, #FDB931, #BC13FE);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+      }
+
+      .markdown-content h1 {
+        font-size: 2.2rem;
+        font-weight: 900;
+        border-bottom: 2px solid rgba(255, 215, 0, 0.3);
+        padding-bottom: 0.5rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .markdown-content h2 {
+        font-size: 1.8rem;
+        font-weight: 700;
+        border-left: 4px solid #BC13FE;
+        padding-left: 1rem;
+        background: linear-gradient(90deg, rgba(188, 19, 254, 0.1) 0%, transparent 100%);
+      }
+
+      .markdown-content h3 {
+        font-size: 1.4rem;
+        font-weight: 600;
+        color: #04D9FF; /* Fallback */
+        -webkit-text-fill-color: #04D9FF;
+        background: none;
+      }
+
+      /* EMPHASIS & STRONG - NEON POP */
+      .markdown-content strong {
+        color: #FFD700;
+        font-weight: 800;
+        text-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+      }
+
+      .markdown-content em {
+        color: #04D9FF;
+        font-style: italic;
+      }
+
+      /* LISTS - CUSTOM MARKERS */
+      .markdown-content ul {
+        list-style: none;
+        padding-left: 1rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .markdown-content ul li {
+        position: relative;
+        padding-left: 1.5rem;
+        margin-bottom: 0.8rem;
+      }
+
+      .markdown-content ul li::before {
+        content: '✦';
+        position: absolute;
+        left: 0;
+        color: #BC13FE;
+        font-size: 1.2rem;
+        line-height: 1.5rem;
+        text-shadow: 0 0 5px #BC13FE;
+      }
+
+      /* BLOCKQUOTES - GLASSMORPHISM */
+      .markdown-content blockquote {
+        margin: 1.5rem 0;
+        padding: 1.5rem;
+        background: rgba(255, 255, 255, 0.03);
+        border-left: 4px solid #FF003C;
+        border-radius: 0 1rem 1rem 0;
+        font-style: italic;
+        color: #FFD1DC;
+        box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+      }
+
+      /* PARAGRAPHS */
+      .markdown-content p {
+        margin-bottom: 1.2rem;
+        font-size: 1.05rem;
+        text-align: justify;
+      }
+
+      /* LINKS */
+      .markdown-content a {
+        color: #04D9FF;
+        text-decoration: none;
+        border-bottom: 1px dashed #04D9FF;
+        transition: all 0.3s ease;
+      }
+
+      .markdown-content a:hover {
+        color: #fff;
+        text-shadow: 0 0 10px #04D9FF;
+        border-bottom-style: solid;
+      }
+      
+      /* TABLES */
+      .markdown-content table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1.5rem 0;
+        background: rgba(255, 255, 255, 0.02);
+        border-radius: 0.5rem;
+        overflow: hidden;
+      }
+      
+      .markdown-content th {
+        background: rgba(188, 19, 254, 0.2);
+        color: #FFD700;
+        font-weight: 700;
+        text-transform: uppercase;
+        padding: 1rem;
+        text-align: left;
+        font-size: 0.9rem;
+        letter-spacing: 0.05em;
+      }
+      
+      .markdown-content td {
+        padding: 1rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        color: #E0E0E0;
+      }
+      
+      .markdown-content tr:last-child td {
+        border-bottom: none;
+      }
+    </style>
+  <link rel="stylesheet" href="/index.css">
+</head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>
