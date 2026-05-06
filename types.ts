@@ -42,4 +42,22 @@ export interface HistoryItem {
 export interface GenerationResult {
   text: string;
   audioBase64?: string;
+  physiognomy?: PhysiognomyData; // Dữ liệu nhân tướng học (nếu có)
+}
+
+export interface FacePoint {
+  id: string;
+  label: string;      // Tên bộ phận (Trán, Mắt...)
+  description: string; // Lời giải ngắn
+  x: number;          // Tọa độ X tương đối (0-100)
+  y: number;          // Tọa độ Y tương đối (0-100)
+}
+
+export interface PhysiognomyData {
+  summary: string;
+  points: FacePoint[];
+  energyChart: {
+    label: string;
+    value: number;
+  }[];
 }

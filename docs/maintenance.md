@@ -20,3 +20,4 @@ Mọi chuỗi ký tự hiển thị trên UI và danh sách gợi ý đều nằ
 - **Thanh toán**: Tích hợp các cổng thanh toán/mã QR động khi người dùng muốn xem các bản tin "Đặc biệt".
 - **Chat trực tiếp**: Cho phép người dùng hỏi đáp sâu hơn về kết quả vừa nhận được thông qua cửa sổ chat.
 - **Đa dạng hóa giọng đọc**: Thêm lựa chọn giọng đọc (Nam/Nữ, vùng miền) trong cài đặt.
+- **Quản lý Tài nguyên (Assets)**: Các file hình ảnh quan trọng (QR Codes, Logos) được lưu trữ tại `public/assets/`. Khi cần thay đổi mã QR, chỉ cần thay thế file ảnh tương ứng mà không cần sửa code.

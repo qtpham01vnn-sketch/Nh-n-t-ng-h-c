@@ -28,6 +28,11 @@ const HistorySidebar: React.FC<HistorySidebarProps> = ({ history, onSelect, isOp
           </div>
         ))}
       </div>
+      
+      {/* Phiên bản ứng dụng - Kín đáo ở cuối Sidebar */}
+      <div className="absolute bottom-4 left-0 w-full text-center opacity-20 pointer-events-none">
+        <span className="text-[10px] text-gray-500 tracking-[0.2em] font-mono">v1.0.1</span>
+      </div>
     </div>
   );
 };

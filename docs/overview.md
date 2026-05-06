@@ -1,7 +1,7 @@
-# Tổng quan Dự án: Thiên Cơ Bất Khả Lộ (Tuấn Master App)
+# Tổng quan Dự án: HUYỀN CƠ CỐ VẤN (Tuấn Master App)
 
 ## 1. Mục tiêu & Ý nghĩa
-Dự án **"Thiên Cơ Bất Khả Lộ"** là một ứng dụng Web cao cấp được thiết kế để cung cấp các dịch vụ luận giải vận mệnh, phong thuỷ và tử vi dựa trên công nghệ AI (Gemini). Mục tiêu chính là tạo ra một trải nghiệm huyền bí, chuyên nghiệp và mang lại giá trị tinh thần, định hướng tích cực cho người dùng trong năm 2026.
+Dự án **"HUYỀN CƠ CỐ VẤN"** là một ứng dụng Web cao cấp được thiết kế để cung cấp các dịch vụ luận giải vận mệnh, phong thuỷ và tử vi dựa trên công nghệ AI (Gemini). Mục tiêu chính là tạo ra một trải nghiệm huyền bí, chuyên nghiệp và mang lại giá trị tinh thần, định hướng tích cực cho người dùng trong năm 2026.
 
 ## 2. Công nghệ sử dụng (Stack)
 - **Frontend**: React (v19), TypeScript, Vite.

@@ -393,8 +393,8 @@ Phân tích dựa trên: Năm sinh, giới tính, Tử vi, con giáp, ngũ hành
 `;
 export const TRANSLATIONS = {
   vi: {
-    title: "THIÊN CƠ BẤT KHẢ LỘ",
-    subtitle: "THẤU THIÊN CƠ - NẮM VẬN MỆNH",
+    title: "HUYỀN CƠ CỐ VẤN",
+    subtitle: "HUYỀN CƠ THẤU HIỂU - CỐ VẤN TẬN TÂM",
     unlock_title: "CHÀO MỪNG BẠN ĐẾN VỚI THẾ GIỚI HUYỀN BÍ",
     unlock_desc: "Nhập mã LÌ XÌ để khám phá vận mệnh của bạn trong năm 2026",
     unlock_placeholder: "Nhập mã bí mật...",
@@ -422,8 +422,8 @@ export const TRANSLATIONS = {
     prohibited: "NGHIÊM CẤM SAO CHÉP THƯƠNG MẠI BẤT HỢP PHÁP"
   },
   en: {
-    title: "DIVINE SECRETS UNVEILED",
-    subtitle: "REVEAL HEAVEN - GRASP DESTINY",
+    title: "HUYEN CO ADVISOR",
+    subtitle: "DIVINE INSIGHT - DEDICATED ADVICE",
     unlock_title: "WELCOME TO THE MYSTICAL WORLD",
     unlock_desc: "Enter the code LIXITET to discover your destiny in 2026",
     unlock_placeholder: "Enter secret code...",

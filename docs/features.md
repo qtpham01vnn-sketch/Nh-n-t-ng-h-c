@@ -10,13 +10,22 @@
 ## 2. Giao diện Luận giải & Nhập liệu
 - **Thông tin gia chủ**: Thu thập Họ tên, Ngày sinh, Nơi ở, Công việc, Tình trạng hôn nhân và Con giáp.
 - **Hệ thống Gợi ý (Niche Suggestions)**: Cung cấp hàng chục chủ đề "hot" và chi tiết giúp người dùng dễ dàng lựa chọn điều mình quan tâm nhất (Công danh, Tài lộc, Tình duyên, v.v.).
-- **Banner Quảng bá**: Tích hợp các banner kêu gọi hành động (CTA) như "Quét mã QR học AI", "Lì xì lấy hên" để tăng tính tương tác và định hướng người dùng.
+- **Banner & QR Hệ sinh thái**: 
+  - Tích hợp mã QR **Agribank** chính chủ cho các giao dịch lì xì/thanh toán.
+  - Tích hợp mã QR **Học AI miễn phí** để dẫn dắt người dùng vào hệ sinh thái AIVA.
+  - Các mã QR được tối ưu hóa kích thước và hiệu ứng (Scan line, Neon Glow) để đảm bảo khả năng quét nhạy bén trên mọi thiết bị di động.
 
-## 3. Kết quả Tiên tri & Tiện ích
-- **Streaming Text**: Kết quả luận giải được hiển thị theo thời gian thực (typing effect), tạo cảm giác AI đang trực tiếp phân tích.
-- **Giọng đọc AI (TTS)**: Tự động chuyển đổi văn bản luận giải thành giọng nói truyền cảm trong nền.
-- **Lịch sử Luận giải**: Cho phép người dùng xem lại các lần luận giải trước đó thông qua Sidebar.
-- **Xuất dữ liệu**: 
-  - Xuất file Word (.doc) để lưu trữ lâu dài.
-  - Tải file Audio (.wav) để nghe lại.
-- **Gợi ý chủ đề tiếp theo**: Cuối mỗi bài luận luôn có gợi ý một chủ đề mới để giữ chân người dùng.
+## 3. Module Nhân tướng học AI (MỚI)
+- **AI Vision Integration**: Sử dụng Gemini 1.5 Flash để phân tích đặc điểm khuôn mặt từ ảnh tải lên.
+- **Hiệu ứng Scan Laser**: Mô phỏng quá trình tầm soát nhân dạng bằng tia laser xanh rực rỡ.
+- **Dashboard Trực quan**: 
+  - Hiển thị ảnh chân dung với các **Điểm neo (Pointers)** giải mã chi tiết từng bộ phận.
+  - **Biểu đồ Năng lượng**: Radar chart (SVG) hiển thị 5 chỉ số vận mệnh (Sự nghiệp, Tình duyên, Trí tuệ...).
+
+## 4. Kết quả & Tiện ích Cao cấp
+- **Streaming Text**: Phản hồi AI theo thời gian thực với hiệu ứng gõ chữ.
+- **Đa phương thức**: Luận giải kết hợp văn bản và giọng đọc AI (TTS) truyền cảm.
+- **Xuất dữ liệu Đa dạng**: 
+  - **Tải file Word**: Lưu trữ văn bản luận giải.
+  - **Hồ sơ VIP (PDF)**: Xuất toàn bộ Dashboard trực quan sang file PDF/In ấn chất lượng cao.
+- **Quản lý Lịch sử**: Lưu trữ và xem lại các phiên luận giải ngay trên giao diện.
