@@ -497,6 +497,19 @@ CỐ VẤN CHIẾN LƯỢC VẬN MỆNH
     `);
     printWindow.document.close();
   };
+  const handleExport = () => {
+    if (!result) return;
+    
+    // Simple text export for .doc (Word) compatibility
+    const element = document.createElement("a");
+    const file = new Blob([result.text], {type: 'text/plain'});
+    element.href = URL.createObjectURL(file);
+    element.download = `Luan-Giai-${formData.fullName.replace(/\s+/g, '-')}.doc`;
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+  };
+
 
   const loadHistoryItem = (item: HistoryItem) => {
     // Parse on load
