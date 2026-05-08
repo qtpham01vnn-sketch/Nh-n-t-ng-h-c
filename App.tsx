@@ -364,15 +364,19 @@ function App() {
       // Pre-configure the utterance
       if (synthRef.current) {
         synthRef.current.cancel(); // Stop any previous speech
-        const utterance = new SpeechSynthesisUtterance(textToSpeak.substring(0, 3000)); // Limit to 3k chars for stability
+        const utterance = new SpeechSynthesisUtterance(textToSpeak.substring(0, 4000)); 
         utterance.lang = lang === 'vi' ? 'vi-VN' : 'en-US';
-        utterance.rate = 0.9; // Slightly slower for "Bậc thầy" feel
-        utterance.pitch = 1.0;
+        utterance.rate = 1.1; // Slightly faster as requested
+        utterance.pitch = 0.9; // Lower pitch for a "Warmer/Deeper" feel
         
-        // Try to find a good Vietnamese voice
+        // Advanced Voice Selection
         const voices = synthRef.current.getVoices();
-        const preferredVoice = voices.find(v => v.lang.includes('vi') && v.name.includes('Google')) || 
-                              voices.find(v => v.lang.includes('vi'));
+        // Priority: 1. Linh (Premium Mac), 2. Google Tiếng Việt, 3. Any Vietnamese
+        const preferredVoice = 
+          voices.find(v => v.name.includes('Linh')) || 
+          voices.find(v => v.name.includes('Google') && v.lang.includes('vi')) ||
+          voices.find(v => v.lang.includes('vi'));
+        
         if (preferredVoice) utterance.voice = preferredVoice;
 
         utterance.onend = () => setIsPlaying(false);
