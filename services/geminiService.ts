@@ -227,40 +227,82 @@ export const generateFengShuiTextStream = async function* (formData: FormData, i
   }
 };
 
-// 2. BACKGROUND AUDIO GENERATION
+// 2. BACKGROUND AUDIO GENERATION (Optimized with chunking and fast provider)
 export const generateFengShuiAudio = async (text: string): Promise<string | undefined> => {
-    const apiKey = process.env.GEMINI_API_KEY;
-    const ai = new GoogleGenerativeAI({ apiKey: apiKey || '' });
-
-    // Clean up text for professional speech synthesis - OPTIMIZED FOR VIP CONTENT
+    const apiKey = process.env.VITE_GEMINI_API_KEY || process.env.GEMINI_API_KEY;
+    
+    // Clean up text for speech
     const textForSpeech = text
-      .replace(/:::NEXT_TOPIC:::.*$/s, '') // Remove Next Topic tag and everything after
-      .replace(/\*\*/g, '') // Remove bold markers
-      .replace(/##/g, '')   // Remove h2 markers
-      .replace(/#/g, '')    // Remove h1 markers
-      .replace(/^\s*-\s/gm, '') // Remove list bullets at start of line
-      .replace(/\[.*?\]/g, '') // Remove citations
-      .replace(/\(.*?\)/g, '') // Remove parentheses
-      .replace(/!/g, '! ')
-      .replace(/\?/g, '? ')
-      .replace(/\./g, '. ')
-      .replace(/\n/g, ', ') // Line breaks to commas
-      .replace(/\s+/g, ' ') // Collapse spaces
+      .replace(/:::NEXT_TOPIC:::.*$/s, '') 
+      .replace(/<physiognomy_json>.*?<\/physiognomy_json>/gs, '')
+      .replace(/\*\*/g, '') 
+      .replace(/##/g, '')   
+      .replace(/#/g, '')    
+      .replace(/^\s*-\s/gm, '') 
+      .replace(/\[.*?\]/g, '') 
+      .replace(/\(.*?\)/g, '') 
+      .replace(/\s+/g, ' ') 
       .trim();
 
+    // To prevent "very long time", we only read the most important parts (approx first 1000 chars)
+    // if the text is too long.
+    const limitedText = textForSpeech.length > 1500 
+      ? textForSpeech.substring(0, 1500) + "... Cảm ơn anh đã lắng nghe."
+      : textForSpeech;
+
     try {
-        const model = genAI.getGenerativeModel({ model: "gemini-flash-latest" });
-        const result = await model.generateContent([
-          { text: textForSpeech }
-        ]);
-    
-        // Lưu ý: SDK chuẩn thường không hỗ trợ TTS trực tiếp như v1beta, 
-        // nhưng nếu anh dùng endpoint custom hoặc bản preview thì cần cấu hình khác.
-        // Tạm thời tôi giữ luồng text-to-content để không gây lỗi.
-        const response = await result.response;
-        return undefined; // TTS sẽ được nâng cấp sau nếu cần
+        // We use a high-quality, fast public TTS proxy for immediate results
+        // This is much faster than calling a heavy LLM for TTS
+        const chunks = splitTextIntoChunks(limitedText, 200);
+        const audioBuffers: Uint8Array[] = [];
+
+        for (const chunk of chunks) {
+            const url = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(chunk)}&tl=vi&client=tw-ob`;
+            const response = await fetch(url);
+            if (response.ok) {
+                const arrayBuffer = await response.arrayBuffer();
+                audioBuffers.push(new Uint8Array(arrayBuffer));
+            }
+        }
+
+        if (audioBuffers.length === 0) return undefined;
+
+        // Combine buffers
+        const totalLength = audioBuffers.reduce((acc, curr) => acc + curr.length, 0);
+        const combinedBuffer = new Uint8Array(totalLength);
+        let offset = 0;
+        for (const buffer of audioBuffers) {
+            combinedBuffer.set(buffer, offset);
+            offset += buffer.length;
+        }
+
+        // Convert to Base64
+        let binary = '';
+        const len = combinedBuffer.byteLength;
+        for (let i = 0; i < len; i++) {
+            binary += String.fromCharCode(combinedBuffer[i]);
+        }
+        return btoa(binary);
+
     } catch (e) {
         console.error("Audio generation error", e);
+        return undefined;
     }
-    return undefined;
+};
+
+// Helper to split text into chunks for TTS limits
+const splitTextIntoChunks = (text: string, maxLength: number): string[] => {
+    const chunks: string[] = [];
+    let current = text;
+    while (current.length > 0) {
+        if (current.length <= maxLength) {
+            chunks.push(current);
+            break;
+        }
+        let cutIndex = current.lastIndexOf(' ', maxLength);
+        if (cutIndex === -1) cutIndex = maxLength;
+        chunks.push(current.substring(0, cutIndex).trim());
+        current = current.substring(cutIndex).trim();
+    }
+    return chunks;
 };
