@@ -103,6 +103,8 @@ function App() {
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const resultRef = useRef<HTMLDivElement>(null);
+  const synthRef = useRef<SpeechSynthesis | null>(null);
+  const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
 
   // Check LocalStorage for Unlock Status
   useEffect(() => {
@@ -132,24 +134,22 @@ function App() {
     setStars(initialStars);
   }, []);
 
-  // Auto-play audio when available
+  // Initialize Speech Synthesis
   useEffect(() => {
-    if (audioUrl && audioRef.current) {
-      const timer = setTimeout(() => {
-        const playPromise = audioRef.current?.play();
-        if (playPromise !== undefined) {
-          playPromise
-            .then(() => setIsPlaying(true))
-            .catch(err => {
-              console.warn("Auto-play blocked:", err);
-              // Do not alert on auto-play block, just let user press play
-              setIsPlaying(false);
-            });
-        }
-      }, 500); // Small delay to ensure render
-      return () => clearTimeout(timer);
+    if (typeof window !== 'undefined') {
+      synthRef.current = window.speechSynthesis;
     }
-  }, [audioUrl]);
+    return () => {
+      if (synthRef.current) synthRef.current.cancel();
+    };
+  }, []);
+
+  // Auto-play/Handle Audio state
+  useEffect(() => {
+    if (audioUrl || isPlaying) {
+      // Logic handled by toggle/auto-play
+    }
+  }, [audioUrl, isPlaying]);
 
   // Auto Fireworks Background Effect
   useEffect(() => {
@@ -355,17 +355,38 @@ function App() {
       setHistory(updatedHistory);
       localStorage.setItem('phongthuy_history', JSON.stringify(updatedHistory));
 
-      // 3. Generate Audio (Background)
-      // Loại bỏ thẻ JSON trước khi gửi cho dịch vụ Audio để đọc mượt mà
+      // 3. Prepare Voice Reading (Native Web Speech API - INSTANT)
       const textToSpeak = fullAccumulatedText.split('<physiognomy_json>')[0].split(':::NEXT_TOPIC:::')[0];
+      
+      // Mock an audio URL to show the UI buttons immediately
+      setAudioUrl("speech-synthesis-active");
+      
+      // Pre-configure the utterance
+      if (synthRef.current) {
+        synthRef.current.cancel(); // Stop any previous speech
+        const utterance = new SpeechSynthesisUtterance(textToSpeak.substring(0, 3000)); // Limit to 3k chars for stability
+        utterance.lang = lang === 'vi' ? 'vi-VN' : 'en-US';
+        utterance.rate = 0.9; // Slightly slower for "Bậc thầy" feel
+        utterance.pitch = 1.0;
+        
+        // Try to find a good Vietnamese voice
+        const voices = synthRef.current.getVoices();
+        const preferredVoice = voices.find(v => v.lang.includes('vi') && v.name.includes('Google')) || 
+                              voices.find(v => v.lang.includes('vi'));
+        if (preferredVoice) utterance.voice = preferredVoice;
 
-      generateFengShuiAudio(textToSpeak).then(audioBase64 => {
-        if (audioBase64) {
-          const audioSrc = `data:audio/wav;base64,${audioBase64}`;
-          setAudioUrl(audioSrc);
-          setResult(prev => prev ? ({ ...prev, audioBase64 }) : null);
-        }
-      }).catch(err => console.error("Audio generation failed in background", err));
+        utterance.onend = () => setIsPlaying(false);
+        utterance.onerror = () => setIsPlaying(false);
+        utteranceRef.current = utterance;
+        
+        // Auto-play if possible
+        setTimeout(() => {
+          if (synthRef.current && utteranceRef.current) {
+            synthRef.current.speak(utteranceRef.current);
+            setIsPlaying(true);
+          }
+        }, 1000);
+      }
 
     } catch (error: any) {
       console.error("Error generating content:", error);
@@ -383,26 +404,20 @@ function App() {
   };
 
   const toggleAudio = () => {
-    if (!audioRef.current) return;
+    if (!synthRef.current) return;
+
     if (isPlaying) {
-      audioRef.current.pause();
+      synthRef.current.pause();
+      setIsPlaying(false);
     } else {
-      // Handle the "element has no supported sources" error gracefully
-      const playPromise = audioRef.current.play();
-      if (playPromise !== undefined) {
-        playPromise
-          .then(() => {
-            // Automatic playback started!
-          })
-          .catch(error => {
-            // Auto-play was prevented
-            console.warn("Playback prevented:", error);
-            setIsPlaying(false);
-            alert("Không thể phát âm thanh. Vui lòng thử lại hoặc kiểm tra loa của bạn.");
-          });
+      if (synthRef.current.paused) {
+        synthRef.current.resume();
+        setIsPlaying(true);
+      } else if (utteranceRef.current) {
+        synthRef.current.speak(utteranceRef.current);
+        setIsPlaying(true);
       }
     }
-    setIsPlaying(!isPlaying);
   };
 
   const handleAudioEnded = () => setIsPlaying(false);
