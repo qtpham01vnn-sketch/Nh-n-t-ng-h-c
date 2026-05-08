@@ -118,9 +118,9 @@ function App() {
       setHistory(JSON.parse(saved));
     }
 
-    // Initialize Stars - Reduced count for performance
+    // Initialize Stars - SIGNIFICANTLY reduced for performance
     const initialStars: Star[] = [];
-    const starCount = window.innerWidth < 768 ? 30 : 60; // Responsive star count
+    const starCount = window.innerWidth < 768 ? 15 : 30; // Further reduced
     for (let i = 0; i < starCount; i++) {
       initialStars.push({
         id: i,
@@ -677,16 +677,15 @@ CỐ VẤN CHIẾN LƯỢC VẬN MỆNH
   return (
     <div className="app-root-container min-h-screen bg-[#05000A]">
     <div id="no-print-zone" className="min-h-screen text-white relative overflow-x-hidden font-sans selection:bg-neonPurple selection:text-white flex flex-col">
-      {/* Watermark Logo */}
-      <div className="fixed inset-0 z-0 flex items-center justify-center pointer-events-none opacity-[0.03]">
-        <img src={LOGO_URL} className="w-[80vw] max-w-2xl animate-spin-slow" style={{ animationDuration: '60s' }} />
+      {/* Watermark Logo - Static for performance */}
+      <div className="fixed inset-0 z-0 flex items-center justify-center pointer-events-none opacity-[0.02]">
+        <img src={LOGO_URL} className="w-[80vw] max-w-2xl opacity-50" />
       </div>
 
-      {/* 3D Background Elements - Purple Neon */}
-      <div className="fixed top-0 left-0 w-full h-full pointer-events-none z-0">
-        <div className="absolute top-[-20%] left-[-20%] w-[80%] h-[80%] bg-deepPurple rounded-full blur-[150px] opacity-40 animate-pulse-fast"></div>
-        <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] bg-neonPurple/20 rounded-full blur-[120px] animate-float"></div>
-        <div className="absolute top-[30%] left-[40%] w-[30%] h-[30%] bg-neonBlue/10 rounded-full blur-[100px] animate-spin-slow"></div>
+      {/* 3D Background Elements - Optimized (Reduced Blurs and Animations) */}
+      <div className="fixed top-0 left-0 w-full h-full pointer-events-none z-0 overflow-hidden">
+        <div className="absolute top-[-20%] left-[-20%] w-[80%] h-[80%] bg-deepPurple/20 rounded-full blur-[80px] pointer-events-none"></div>
+        <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] bg-neonPurple/10 rounded-full blur-[60px] pointer-events-none"></div>
 
         {/* Starfield - Optimized with React.memo or simple separation */}
         <div className="absolute inset-0 overflow-hidden">
